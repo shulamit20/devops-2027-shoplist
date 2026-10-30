@@ -10,7 +10,7 @@
 | `app/stats/Dockerfile` | אורז את stats (Node.js) ל-image |
 | `app/frontend/nginx.conf` | ההגדרות של Nginx: מגיש את הדף, ומעביר בקשות API לסרוויסים |
 | `app/frontend/Dockerfile` | אורז את ה-frontend ל-image |
-| `docker/init.sql` | יוצר את טבלת המוצרים במסד הנתונים |
+| `sql/init.sql` | יוצר את טבלת המוצרים במסד הנתונים |
 | `docker/docker-compose.yml` | מגדיר את כל ארבעת הסרוויסים ומריץ אותם יחד |
 
 **מה תדעו לעשות:**
@@ -134,7 +134,7 @@ container הוא **חדר במלון**. נכנסות (`run`) ומקבלות חד
 
 **איך מבדילים בקובץ Compose?**
 - **רק שם** (`postgres-data:/var/lib/...`) → named volume. השם מופיע שוב בסוף הקובץ, תחת `volumes:`.
-- **מתחיל ב-`./` או `/`** (`./init.sql:/docker-...`) → bind mount.
+- **מתחיל ב-`./`, `../` או `/`** (`../sql/init.sql:/docker-...`) → bind mount.
 
 > **טעות נפוצה:** `-v /data` בלי שם. Docker יוצר "anonymous volume" עם שם אקראי ארוך, ואחר כך קשה למצוא אותו. תמיד לתת שם.
 
@@ -295,7 +295,7 @@ EXPOSE 80
 
 ### שלב 4 — init.sql
 
-ליצור תיקייה `docker` בתיקייה הראשית, ובתוכה `docker/init.sql`:
+ליצור תיקייה `sql` בתיקייה הראשית, ובתוכה `sql/init.sql`:
 
 ```sql
 CREATE TABLE IF NOT EXISTS products (
@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS products (
 
 ### שלב 5 — docker-compose.yml: postgres
 
-ליצור את `docker/docker-compose.yml`, ולהתחיל ב-service הראשון:
+ליצור תיקייה `docker` בתיקייה הראשית, ובתוכה את `docker/docker-compose.yml`. מתחילות ב-service הראשון:
 
 ```yaml
 services:
@@ -327,7 +327,7 @@ services:
       POSTGRES_PASSWORD: shoppass
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U shopuser -d shoplist"]
       interval: 10s
@@ -340,7 +340,7 @@ services:
 | `image` | image מוכן, בלי Dockerfile |
 | `environment` | שם המסד, משתמש וסיסמה. נקראים רק בהפעלה הראשונה |
 | `postgres-data:...` | **named volume**: הארונית של הנתונים |
-| `./init.sql:...` | **bind mount**: הקובץ מהמחשב שלנו |
+| `../sql/init.sql:...` | **bind mount**: הקובץ מהמחשב שלנו. הנתיב יחסי לקובץ ה-Compose: יוצאות מ-`docker` ונכנסות ל-`sql` |
 | `healthcheck` | `pg_isready` שואל כל 10 שניות: "המסד מוכן?" |
 
 > **YAML רגיש לרווחים.** רווחים בלבד, לא Tab, שניים לכל רמה. מה שמוזח מתחת ל-`postgres:` שייך ל-postgres.
@@ -394,7 +394,7 @@ volumes:
 | `ports` | **רק ל-frontend.** כל השאר פנימיים |
 | `volumes:` בסוף | רשימת הארוניות. כאן Docker לומד ש-`postgres-data` הוא named volume |
 
-> **ברשת של הכיתה (נטפרי):** Compose בונה את ה-backend מה-Dockerfile שלכן, כולל בלוק נטפרי משיעור 2. אין צורך בשינוי.
+> **ברשת של נטפרי:** אם ה-build של ה-backend נכשל ב-`pip install` עם שגיאת SSL, להוסיף ל-`pip install` ב-Dockerfile את הדגלים `--trusted-host pypi.org --trusted-host files.pythonhosted.org`.
 
 ---
 

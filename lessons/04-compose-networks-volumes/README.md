@@ -16,7 +16,7 @@
 
 ## שיעורי בית
 
-[homework.md](homework.md): `docker-compose.yml` מלא, ו-Dockerfile ב-multi-stage ל-frontend. ישירות ב-GitHub, בלי התקנות בבית.
+[homework.md](homework.md): **מסמך דרישות.** לסיים בבית את כל מה שלא הספקנו: Dockerfiles לשלושת הסרוויסים, `nginx.conf`, `init.sql` ו-`docker-compose.yml`, להריץ את ShopList ב-Docker Compose, ולהוסיף Dockerfile ב-multi-stage ל-frontend. הגשה ב-push, לפני שיעור 5.
 
 ## הקבצים בתיקייה
 

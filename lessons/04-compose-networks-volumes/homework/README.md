@@ -1,5 +1,5 @@
 # שיעורי בית — שיעור 4
 
-כאן יוצרים את הקבצים להגשה: `docker-compose.yml`, `init.sql` ו-`answers.md`.
-את `Dockerfile.multistage` יוצרים ב-`app/frontend`.
-ההוראות: [../homework.md](../homework.md).
+כאן מגישים את `answers.md`, ובתיקייה `screenshots/` את שלושת צילומי המסך.
+את שאר הקבצים כותבים במקום הרגיל שלהם: ב-`app/` וב-`docker/`.
+מסמך הדרישות המלא: [../homework.md](../homework.md).
