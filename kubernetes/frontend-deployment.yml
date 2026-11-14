@@ -9,3 +9,27 @@
 #   [ ] no env, no Secret, no readinessProbe
 #
 # Before apply: kubectl apply --dry-run=server -f kubernetes/frontend-deployment.yml
+# stats-deployment.yml - your turn (step 9a). Same pattern as backend-deployment.yml
+# stats has no Secret: it only talks to the backend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: shoplist
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend                # exactly the same label as above
+    spec:
+      containers:
+        - name: frontend
+          image: shoplist-frontend:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+        

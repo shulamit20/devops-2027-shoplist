@@ -6,3 +6,17 @@
 #   [ ] nodePort: 30080       (same indentation as port)
 #
 # Before apply: kubectl apply --dry-run=server -f kubernetes/frontend-service.yml
+# stats-service.yml - your turn (step 9b). Keys only, the values are up to you
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend            # this name is the address. nginx.conf looks for it
+  namespace: shoplist
+spec:
+  type: NodePort
+  selector:
+    app: frontend          # must match the label in frontend-deployment.yml
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
