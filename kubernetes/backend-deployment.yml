@@ -5,7 +5,7 @@ metadata:
   name: backend
   namespace: shoplist
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: backend                     # the backend label
@@ -19,8 +19,7 @@ spec:
           image: shoplist-backend:local            # the image we built in step 1, including the tag
           imagePullPolicy: Never    # do not download: the image is already on this computer
           env:
-            - name: DB_HOST
-              value: postgres           # name of the postgres Service. Not a secret, so written directly
+                     # name of the postgres Service. Not a secret, so written directly
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:

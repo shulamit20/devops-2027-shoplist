@@ -1,5 +1,5 @@
-# stats-deployment.yml - your turn (step 9a). Same pattern as backend-deployment.yml
-# stats has no Secret: it only talks to the backend
+
+# stats-deployment.yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: stats                # exactly the same label as above
+        app: stats
     spec:
       containers:
         - name: stats
@@ -21,7 +21,10 @@ spec:
           imagePullPolicy: Never
           env:
             - name: BACKEND_URL
-              value: http://backend:5000        # backend Service name, with http:// and port
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: BACKEND_URL
           ports:
             - containerPort: 3000
           readinessProbe:
